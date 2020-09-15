@@ -1,0 +1,6 @@
+
+client/.dart_tool
+client/build
+client/.packages
+
+server/node_modules
