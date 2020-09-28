@@ -1,12 +1,10 @@
-const spotifyClientId = process.env.SPOTIFY_CLIENT_ID
-const spotifyClientSecret = process.env.SPOTIFY_CLIENT_SECRET
-const spotifyUserId = process.env.SPOTIFY_USER_ID
+const roomGroupId = process.env.ROOM_GROUP_ID
 
-const mainDeviceName = process.env.MAIN_DEVICE_NAME
+const hueUsername = process.env.HUE_USERNAME
+const hueDeviceName = process.env.HUE_DEVICE_NAME
 
 module.exports = {
-    spotifyClientId,
-    spotifyClientSecret,
-    spotifyUserId,
-    mainDeviceName,
+    roomGroupId,
+    hueUsername,
+    hueDeviceName
 }

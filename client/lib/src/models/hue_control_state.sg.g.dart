@@ -7,10 +7,17 @@ part of 'hue_control_state.sg.dart';
 // **************************************************************************
 
 class _$HueControlState extends HueControlState {
+  @override
+  final double brightness;
+
   factory _$HueControlState([void Function(HueControlStateBuilder) updates]) =>
       (new HueControlStateBuilder()..update(updates)).build();
 
-  _$HueControlState._() : super._();
+  _$HueControlState._({this.brightness}) : super._() {
+    if (brightness == null) {
+      throw new BuiltValueNullFieldError('HueControlState', 'brightness');
+    }
+  }
 
   @override
   HueControlState rebuild(void Function(HueControlStateBuilder) updates) =>
@@ -23,17 +30,19 @@ class _$HueControlState extends HueControlState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is HueControlState;
+    return other is HueControlState && brightness == other.brightness;
   }
 
   @override
   int get hashCode {
-    return 584098866;
+    return $jf($jc(0, brightness.hashCode));
   }
 
   @override
   String toString() {
-    return newBuiltValueToStringHelper('HueControlState').toString();
+    return (newBuiltValueToStringHelper('HueControlState')
+          ..add('brightness', brightness))
+        .toString();
   }
 }
 
@@ -41,7 +50,19 @@ class HueControlStateBuilder
     implements Builder<HueControlState, HueControlStateBuilder> {
   _$HueControlState _$v;
 
+  double _brightness;
+  double get brightness => _$this._brightness;
+  set brightness(double brightness) => _$this._brightness = brightness;
+
   HueControlStateBuilder();
+
+  HueControlStateBuilder get _$this {
+    if (_$v != null) {
+      _brightness = _$v.brightness;
+      _$v = null;
+    }
+    return this;
+  }
 
   @override
   void replace(HueControlState other) {
@@ -58,7 +79,7 @@ class HueControlStateBuilder
 
   @override
   _$HueControlState build() {
-    final _$result = _$v ?? new _$HueControlState._();
+    final _$result = _$v ?? new _$HueControlState._(brightness: brightness);
     replace(_$result);
     return _$result;
   }
