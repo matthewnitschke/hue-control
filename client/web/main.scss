@@ -18,7 +18,7 @@ html, body, #app {
   align-items: center;
   justify-content: center;
   background-color: #52575d;
-  cursor: none;
+  // cursor: none;
 
   .slider {
     position: fixed;
@@ -41,5 +41,9 @@ html, body, #app {
     font-size: 5rem;
 
     user-select: none;
+  }
+
+  &.off {
+    opacity: .5;
   }
 }

@@ -9,10 +9,8 @@ const v3 = require('node-hue-api').v3
 const port = 3000;
 const express = require('express');
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
 
-const { hueUsername, hueDeviceName } = require('./environment.js');
+const { hueUsername, hueGroupName } = require('./environment.js');
 
 app.use(express.static('web'))
 
@@ -20,28 +18,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/web/index.html'));
 })
 
-app.get('/set/:value', async (req, res) => {
-
-  const { value } = req.params;
-
-  const groupState = new GroupLightState()
-    .on()
-    .brightness(value);
-
-  hueApi.groups.setGroupState(groupId, groupState);
-});
-
-app.get('/groups', async (req, res) => {
-  const api = await hueApi.createLocal(bridgeIp).connect();
-  let allGroups = await api.groups.getAll()
-
-    // .then(allGroups => {
-    //   // Display the groups from the bridge
-    //   allGroups.forEach(group => {
-    //     console.log(group.toStringDetailed());
-    //   });
-    // });
-});
+app.get('/env', (req, res) => {
+  res.json({
+    username: hueUsername,
+    groupName: hueGroupName
+  })
+})
 
 app.get('/auth', async (req, res) => {
   const discoveryResults = await discovery.nupnpSearch();
@@ -68,7 +50,7 @@ app.get('/auth', async (req, res) => {
     }))
 
     res.status(200).send({
-      message: 'Created and saved to save.json'
+      message: `Created. Username: ${createdUser.username}`
     })
   } catch(err) {
     console.error(err)
@@ -84,10 +66,6 @@ app.get('/auth', async (req, res) => {
   }
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
-
-http.listen(port, () =>
+app.listen(port, () =>
   console.log(`Example app listening at http://localhost:${port}`)
 );

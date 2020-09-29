@@ -8,12 +8,17 @@ part of 'hue_control_state.sg.dart';
 
 class _$HueControlState extends HueControlState {
   @override
+  final bool isOn;
+  @override
   final double brightness;
 
   factory _$HueControlState([void Function(HueControlStateBuilder) updates]) =>
       (new HueControlStateBuilder()..update(updates)).build();
 
-  _$HueControlState._({this.brightness}) : super._() {
+  _$HueControlState._({this.isOn, this.brightness}) : super._() {
+    if (isOn == null) {
+      throw new BuiltValueNullFieldError('HueControlState', 'isOn');
+    }
     if (brightness == null) {
       throw new BuiltValueNullFieldError('HueControlState', 'brightness');
     }
@@ -30,17 +35,20 @@ class _$HueControlState extends HueControlState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is HueControlState && brightness == other.brightness;
+    return other is HueControlState &&
+        isOn == other.isOn &&
+        brightness == other.brightness;
   }
 
   @override
   int get hashCode {
-    return $jf($jc(0, brightness.hashCode));
+    return $jf($jc($jc(0, isOn.hashCode), brightness.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('HueControlState')
+          ..add('isOn', isOn)
           ..add('brightness', brightness))
         .toString();
   }
@@ -50,6 +58,10 @@ class HueControlStateBuilder
     implements Builder<HueControlState, HueControlStateBuilder> {
   _$HueControlState _$v;
 
+  bool _isOn;
+  bool get isOn => _$this._isOn;
+  set isOn(bool isOn) => _$this._isOn = isOn;
+
   double _brightness;
   double get brightness => _$this._brightness;
   set brightness(double brightness) => _$this._brightness = brightness;
@@ -58,6 +70,7 @@ class HueControlStateBuilder
 
   HueControlStateBuilder get _$this {
     if (_$v != null) {
+      _isOn = _$v.isOn;
       _brightness = _$v.brightness;
       _$v = null;
     }
@@ -79,7 +92,8 @@ class HueControlStateBuilder
 
   @override
   _$HueControlState build() {
-    final _$result = _$v ?? new _$HueControlState._(brightness: brightness);
+    final _$result =
+        _$v ?? new _$HueControlState._(isOn: isOn, brightness: brightness);
     replace(_$result);
     return _$result;
   }

@@ -1,8 +1,9 @@
 
 import 'package:hue_control/src/models/hue_control_state.sg.dart';
+import 'package:hue_control/src/redux/hue_api_middleware.dart';
+import 'package:hue_control/src/redux/hue_control_actions.dart';
 import 'package:hue_control/src/redux/reducers/hue_control_reducer.dart';
-import 'package:hue_control/src/utils/sonos_api.dart';
-import 'package:over_react/over_react.dart';
+import 'package:hue_control/src/utils/hue_api.dart';
 import 'package:over_react/over_react_redux.dart';
 import 'package:redux/redux.dart';
 
@@ -10,24 +11,31 @@ import 'package:redux/redux.dart';
 import 'components/app.dart';
 
 class HueControlModule {
-  HueActionAPI _sonosActionApi;
+  HueApi _hueApi;
 
   Store<HueControlState> _store;
 
   HueControlModule() {
-    _sonosActionApi = HueActionAPI();
-
-
+    _hueApi = HueApi();
 
     _store = Store<HueControlState>(
       hueControlReducer,
       initialState: HueControlState((b) => b
-        ..brightness = 50.0
+        ..isOn = false
+        ..brightness = 0
       ),
-      // middleware: SonosAPIMiddleware(_sonosActionApi).middleware,
+      middleware: HueApiMiddleware(_hueApi).middleware,
     );
 
-    HueEventAPI(_store);
+    _hueApi.init()
+      .then((_) async {
+        final bri = await _hueApi.getBrightness();
+        _store.dispatch(SetBrightnessAction(bri, shouldSyncWithServer: false));
+      })
+      .then((_) async {
+        final isOn = await _hueApi.getState();
+        _store.dispatch(SetStateAction(isOn, shouldSyncWithServer: false));
+      });
   }
 
   Object content() {
